@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>RF Map MAX</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/0001_1.js"></script>
+        <script src="data/00101_2.js"></script>
+        <script src="data/01025_3.js"></script>
+        <script src="data/02505_4.js"></script>
+        <script src="data/05075_5.js"></script>
+        <script src="data/0751_6.js"></script>
+        <script src="data/125_7.js"></script>
+        <script src="data/255_8.js"></script>
+        <script src="data/510_9.js"></script>
+        <script src="data/1025_10.js"></script>
+        <script src="data/2550_11.js"></script>
+        <script src="data/50100_12.js"></script>
+        <script src="data/1001000_13.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:12
+        }).fitBounds([[-37.054275947607515,174.51649279073993],[-36.71506485892659,175.0541146315693]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_OSMStandard_0');
+        map.getPane('pane_OSMStandard_0').style.zIndex = 400;
+        var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OSMStandard_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+            minZoom: 12,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OSMStandard_0;
+        map.addLayer(layer_OSMStandard_0);
+        function pop_0001_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_0001_1_0() {
+            return {
+                pane: 'pane_0001_1',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,166,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_0001_1');
+        map.getPane('pane_0001_1').style.zIndex = 401;
+        map.getPane('pane_0001_1').style['mix-blend-mode'] = 'normal';
+        var layer_0001_1 = new L.geoJson(json_0001_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_0001_1',
+            layerName: 'layer_0001_1',
+            pane: 'pane_0001_1',
+            onEachFeature: pop_0001_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_0001_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_0001_1);
+        map.addLayer(layer_0001_1);
+        function pop_00101_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_00101_2_0() {
+            return {
+                pane: 'pane_00101_2',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(81,191,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_00101_2');
+        map.getPane('pane_00101_2').style.zIndex = 402;
+        map.getPane('pane_00101_2').style['mix-blend-mode'] = 'normal';
+        var layer_00101_2 = new L.geoJson(json_00101_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_00101_2',
+            layerName: 'layer_00101_2',
+            pane: 'pane_00101_2',
+            onEachFeature: pop_00101_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_00101_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_00101_2);
+        map.addLayer(layer_00101_2);
+        function pop_01025_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_01025_3_0() {
+            return {
+                pane: 'pane_01025_3',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(161,217,1,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_01025_3');
+        map.getPane('pane_01025_3').style.zIndex = 403;
+        map.getPane('pane_01025_3').style['mix-blend-mode'] = 'normal';
+        var layer_01025_3 = new L.geoJson(json_01025_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_01025_3',
+            layerName: 'layer_01025_3',
+            pane: 'pane_01025_3',
+            onEachFeature: pop_01025_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_01025_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_01025_3);
+        map.addLayer(layer_01025_3);
+        function pop_02505_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_02505_4_0() {
+            return {
+                pane: 'pane_02505_4',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(242,242,1,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_02505_4');
+        map.getPane('pane_02505_4').style.zIndex = 404;
+        map.getPane('pane_02505_4').style['mix-blend-mode'] = 'normal';
+        var layer_02505_4 = new L.geoJson(json_02505_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_02505_4',
+            layerName: 'layer_02505_4',
+            pane: 'pane_02505_4',
+            onEachFeature: pop_02505_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_02505_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_02505_4);
+        map.addLayer(layer_02505_4);
+        function pop_05075_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_05075_5_0() {
+            return {
+                pane: 'pane_05075_5',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,204,1,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_05075_5');
+        map.getPane('pane_05075_5').style.zIndex = 405;
+        map.getPane('pane_05075_5').style['mix-blend-mode'] = 'normal';
+        var layer_05075_5 = new L.geoJson(json_05075_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_05075_5',
+            layerName: 'layer_05075_5',
+            pane: 'pane_05075_5',
+            onEachFeature: pop_05075_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_05075_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_05075_5);
+        map.addLayer(layer_05075_5);
+        function pop_0751_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_0751_6_0() {
+            return {
+                pane: 'pane_0751_6',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,166,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_0751_6');
+        map.getPane('pane_0751_6').style.zIndex = 406;
+        map.getPane('pane_0751_6').style['mix-blend-mode'] = 'normal';
+        var layer_0751_6 = new L.geoJson(json_0751_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_0751_6',
+            layerName: 'layer_0751_6',
+            pane: 'pane_0751_6',
+            onEachFeature: pop_0751_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_0751_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_0751_6);
+        map.addLayer(layer_0751_6);
+        function pop_125_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_125_7_0() {
+            return {
+                pane: 'pane_125_7',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,128,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_125_7');
+        map.getPane('pane_125_7').style.zIndex = 407;
+        map.getPane('pane_125_7').style['mix-blend-mode'] = 'normal';
+        var layer_125_7 = new L.geoJson(json_125_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_125_7',
+            layerName: 'layer_125_7',
+            pane: 'pane_125_7',
+            onEachFeature: pop_125_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_125_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_125_7);
+        map.addLayer(layer_125_7);
+        function pop_255_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_255_8_0() {
+            return {
+                pane: 'pane_255_8',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,85,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_255_8');
+        map.getPane('pane_255_8').style.zIndex = 408;
+        map.getPane('pane_255_8').style['mix-blend-mode'] = 'normal';
+        var layer_255_8 = new L.geoJson(json_255_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_255_8',
+            layerName: 'layer_255_8',
+            pane: 'pane_255_8',
+            onEachFeature: pop_255_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_255_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_255_8);
+        map.addLayer(layer_255_8);
+        function pop_510_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_510_9_0() {
+            return {
+                pane: 'pane_510_9',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,43,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_510_9');
+        map.getPane('pane_510_9').style.zIndex = 409;
+        map.getPane('pane_510_9').style['mix-blend-mode'] = 'normal';
+        var layer_510_9 = new L.geoJson(json_510_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_510_9',
+            layerName: 'layer_510_9',
+            pane: 'pane_510_9',
+            onEachFeature: pop_510_9,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_510_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_510_9);
+        map.addLayer(layer_510_9);
+        function pop_1025_10(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_1025_10_0() {
+            return {
+                pane: 'pane_1025_10',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_1025_10');
+        map.getPane('pane_1025_10').style.zIndex = 410;
+        map.getPane('pane_1025_10').style['mix-blend-mode'] = 'normal';
+        var layer_1025_10 = new L.geoJson(json_1025_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_1025_10',
+            layerName: 'layer_1025_10',
+            pane: 'pane_1025_10',
+            onEachFeature: pop_1025_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_1025_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_1025_10);
+        map.addLayer(layer_1025_10);
+        function pop_2550_11(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_2550_11_0() {
+            return {
+                pane: 'pane_2550_11',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,0,85,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_2550_11');
+        map.getPane('pane_2550_11').style.zIndex = 411;
+        map.getPane('pane_2550_11').style['mix-blend-mode'] = 'normal';
+        var layer_2550_11 = new L.geoJson(json_2550_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_2550_11',
+            layerName: 'layer_2550_11',
+            pane: 'pane_2550_11',
+            onEachFeature: pop_2550_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_2550_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_2550_11);
+        map.addLayer(layer_2550_11);
+        function pop_50100_12(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_50100_12_0() {
+            return {
+                pane: 'pane_50100_12',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(170,0,170,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_50100_12');
+        map.getPane('pane_50100_12').style.zIndex = 412;
+        map.getPane('pane_50100_12').style['mix-blend-mode'] = 'normal';
+        var layer_50100_12 = new L.geoJson(json_50100_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_50100_12',
+            layerName: 'layer_50100_12',
+            pane: 'pane_50100_12',
+            onEachFeature: pop_50100_12,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_50100_12_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_50100_12);
+        map.addLayer(layer_50100_12);
+        function pop_1001000_13(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PD_MAX_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MAX_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MAX_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_AVG_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_AVG_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_AVG_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PD_MIN_(mW/m2)</th>\
+                        <td>' + (feature.properties['PD_MIN_(mW/m2)'] !== null ? autolinker.link(feature.properties['PD_MIN_(mW/m2)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Possible source</th>\
+                        <td>' + (feature.properties['Source'] !== null ? autolinker.link(feature.properties['Source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number_of_points</th>\
+                        <td>' + (feature.properties['Number_of_points'] !== null ? autolinker.link(feature.properties['Number_of_points'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_1001000_13_0() {
+            return {
+                pane: 'pane_1001000_13',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,0,255,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_1001000_13');
+        map.getPane('pane_1001000_13').style.zIndex = 413;
+        map.getPane('pane_1001000_13').style['mix-blend-mode'] = 'normal';
+        var layer_1001000_13 = new L.geoJson(json_1001000_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_1001000_13',
+            layerName: 'layer_1001000_13',
+            pane: 'pane_1001000_13',
+            onEachFeature: pop_1001000_13,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_1001000_13_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_1001000_13);
+        map.addLayer(layer_1001000_13);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>RF Map MAX</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'topright'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'Some typical electromagnetic radiation (EMR) measurements around Auckland. The measurements were taken with an emf-390 meter. The power density units are milliwatts per square meter (mW/m2). The GPS coordinates were logged using an Android phone. The GPS and EMR were combined by the timestamp to give a geospatial representation. The data set was clustered to reduce the number of points displayed on the map.<br /><br />Each dot on the map can represent multiple measurements. Hovering over a data point will give the statistics for that data point cluster (maximum, average, minimum, radiation source, and the number of data points used for the sample). The legend allows users to filter the data set to include measurements in a range by selecting the checkboxes. The legend and data points are color-coded by the maximum reading for each cluster.';
+            };
+            abstract.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/1001000_13.png" /> 100 - 1000': layer_1001000_13,'<img src="legend/50100_12.png" /> 50 - 100': layer_50100_12,'<img src="legend/2550_11.png" /> 25 - 50': layer_2550_11,'<img src="legend/1025_10.png" /> 10 - 25': layer_1025_10,'<img src="legend/510_9.png" /> 5 - 10': layer_510_9,'<img src="legend/255_8.png" /> 2.5 - 5': layer_255_8,'<img src="legend/125_7.png" /> 1 - 2.5': layer_125_7,'<img src="legend/0751_6.png" /> 0.75 - 1': layer_0751_6,'<img src="legend/05075_5.png" /> 0.5 - 0.75': layer_05075_5,'<img src="legend/02505_4.png" /> 0.25 - 0.5': layer_02505_4,'<img src="legend/01025_3.png" /> 0.1 - 0.25': layer_01025_3,'<img src="legend/00101_2.png" /> 0.01 - 0.1': layer_00101_2,'<img src="legend/0001_1.png" /> 0 - 0.01': layer_0001_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);L.control.scale({position: 'bottomleft', maxWidth: 100, metric: true, imperial: false, updateWhenIdle: false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
